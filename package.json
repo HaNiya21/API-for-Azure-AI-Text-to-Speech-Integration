@@ -7,8 +7,12 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "start": "node src/app.js",
+  "dev": "nodemon src/app.js",
+  "test": "jest",
+  "test:unit": "jest tests/unit",
+  "test:integration": "jest tests/integration"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration.git"
@@ -20,5 +24,15 @@
     "url": "https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration/issues"
   },
   "homepage": "https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-simple": "^0.5.6",
+    "microsoft-cognitiveservices-speech-sdk": "^1.43.1"
+  }
 }
