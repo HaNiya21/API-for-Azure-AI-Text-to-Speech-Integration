@@ -2,11 +2,36 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jwt-simple');
 const dotenv = require('dotenv');
+const cors = require('cors');
+const ttsRoutes = require('./routes/tts');
+const authRoutes = require('./routes/auth');
+const { rateLimit } = require('./middlewares/rateLimit');
+const { logger } = require('./utils/logger');
+
 
 dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/tts', ttsRoutes);
+app.use('/auth', authRoutes);
+
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+ 
 
 // Placeholder for authentication middleware
 function authenticate(req, res, next) {

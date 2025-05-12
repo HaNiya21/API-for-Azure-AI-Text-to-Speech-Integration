@@ -1,42 +1,26 @@
-const sdk = require('microsoft-cognitiveservices-speech-sdk');
+const speechSDK = require('@azure/cognitiveservices-speech-sdk');
+const { AZURE_API_KEY, AZURE_REGION } = process.env;
 
-class AzureTTS {
-  constructor() {
-    this.speechConfig = sdk.SpeechConfig.fromSubscription(
-      process.env.AZURE_API_KEY,
-      process.env.AZURE_REGION
-    );
-    this.speechConfig.speechSynthesisVoiceName = "en-US-JennyNeural";
-  }
+const convertToSpeech = async (text) => {
+    const audioConfig = speechSDK.AudioConfig.fromAudioFileOutput('output.mp3');
+    const speechConfig = speechSDK.SpeechConfig.fromSubscription(AZURE_API_KEY, AZURE_REGION);
+    const synthesizer = new speechSDK.SpeechSynthesizer(speechConfig, audioConfig);
 
-  async synthesize(text, voice, format = "audio-24khz-48kbitrate-mono-mp3") {
     return new Promise((resolve, reject) => {
-      try {
-        this.speechConfig.speechSynthesisVoiceName = voice || this.speechConfig.speechSynthesisVoiceName;
-        
-        const audioConfig = sdk.AudioConfig.fromStreamOutput();
-        const synthesizer = new sdk.SpeechSynthesizer(this.speechConfig, audioConfig);
-
         synthesizer.speakTextAsync(
-          text,
-          result => {
-            synthesizer.close();
-            if (result) {
-              resolve(result.audioData);
-            } else {
-              reject(new Error("No audio data received"));
+            text,
+            (result) => {
+                if (result.reason === speechSDK.ResultReason.SynthesizingAudioCompleted) {
+                    resolve('output.mp3');  // Assuming the file is saved as 'output.mp3'
+                } else {
+                    reject(new Error('Speech synthesis failed.'));
+                }
+            },
+            (err) => {
+                reject(err);
             }
-          },
-          error => {
-            synthesizer.close();
-            reject(error);
-          }
         );
-      } catch (error) {
-        reject(error);
-      }
     });
-  }
-}
+};
 
-module.exports = new AzureTTS();
+module.exports = { convertToSpeech };
