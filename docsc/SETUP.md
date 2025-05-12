@@ -16,7 +16,7 @@ In the **SETUP.md** file, you'll provide detailed steps to help users set up the
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/tts-api.git
+   git clone https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration.git
    cd tts-api
 Install dependencies:
 

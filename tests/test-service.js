@@ -1,5 +1,5 @@
 require('dotenv').config();
-const azureTTS = require('./src/services/azure-tts');
+const azureTTS = require('../src/services/azure-tts');
 const fs = require('fs');
 
 (async () => {
