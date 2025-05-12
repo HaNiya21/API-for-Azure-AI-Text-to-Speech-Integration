@@ -1,4 +1,13 @@
 const { synthesizeSpeech } = require('../services/azure-tts');
+const { body, validationResult } = require('express-validator');
+
+const convertTextToSpeech = async (req, res, next) => {
+    await body('text').isLength({ min: 1 }).withMessage('Text is required').run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
 // Controller function to handle Text-to-Speech requests
 const convertTextToSpeech = async (req, res, next) => {

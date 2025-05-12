@@ -1,22 +1,13 @@
-const request = require('supertest');
-const app = require('../../src/app');
+const { synthesizeSpeech } = require('../../src/services/azure-tts');
+const path = require('path');
 
-describe('POST /api/tts/convert', () => {
-    it('should return a success message with audio URL', async () => {
-        const response = await request(app)
-            .post('/api/tts/convert')
-            .send({ text: 'Hello, world!' });
-
-        expect(response.status).toBe(200);
-        expect(response.body.audioUrl).toBe('output.mp3');
+describe('Azure TTS Service', () => {
+    it('should generate a speech file', async () => {
+        const audioFile = await synthesizeSpeech('Hello, this is a test.');
+        expect(audioFile).toBe(path.join(__dirname, '../../src/output.wav')); // Path where the file is saved
     });
 
-    it('should return error for missing text', async () => {
-        const response = await request(app)
-            .post('/api/tts/convert')
-            .send({});
-
-        expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Text is required');
+    it('should throw an error if text is empty', async () => {
+        await expect(synthesizeSpeech('')).rejects.toThrow('Text is required');
     });
 });

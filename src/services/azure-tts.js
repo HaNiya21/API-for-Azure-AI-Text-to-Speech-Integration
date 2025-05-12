@@ -4,6 +4,16 @@ const path = require('path');
 // Create a function for text-to-speech synthesis
 const synthesizeSpeech = (text) => {
     return new Promise((resolve, reject) => {
+
+ if (!process.env.SPEECH_KEY || !process.env.SPEECH_REGION) {
+            reject(new Error("Azure API key or region is missing."));
+            return;
+        }
+        if (!text || text.trim() === '') {
+            reject(new Error("Text is required"));
+            return;
+        }
+
         const audioFile = path.join(__dirname, 'output.wav'); // Define output path
 
         // Azure SDK Speech Config

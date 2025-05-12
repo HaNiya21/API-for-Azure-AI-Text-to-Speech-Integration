@@ -1,3 +1,26 @@
+# Azure Text-to-Speech API
+
+## Overview
+This API converts text into speech using Azure's Cognitive Services Text-to-Speech API. It returns an audio file (.wav) that contains the spoken version of the input text.
+
+## Endpoints
+
+### POST /api/tts/convert
+Converts the provided text into speech.
+
+#### Request
+```json
+{
+  "text": "Hello world!"
+}
+Response
+json
+{
+  "message": "Text-to-Speech synthesis completed.",
+  "audioUrl": "/path/to/generated-audio.wav"
+}
+
+
 tts-api/
 ├── /docs
 │   ├── API_REFERENCE.md      # Endpoint specs
@@ -9,15 +32,16 @@ tts-api/
 │   │   ├── auth.js
 │   │   ├── rateLimit.js
 │   │   └── validate.js
-│   ├── /models
 │   ├── /routes
 │   │   ├── tts.js
 │   │   └── auth.js
 │   ├── /services
 │   │   └── azure-tts.js
+soap
+rpc
 │   ├── /utils
 │   │   ├── logger.js
-│   │   └── errors.js
+│   │ 
 │   └── app.js                # Main app
 ├── /tests
 │   ├── /unit
@@ -25,7 +49,7 @@ tts-api/
 │   │   └── azure-tts.test.js
 │   └── /integration
 │       └── api.test.js
-├── .env.example              # Env template
+├── .env            
 ├── .gitignore
 ├── package.json              # Updated scripts
 ├── README.md                 # Project overview
