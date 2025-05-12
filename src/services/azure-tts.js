@@ -1,33 +1,45 @@
-const { SpeechConfig, AudioConfig, SpeechSynthesizer } = require('@azure/cognitiveservices-speech');
+const { SpeechSynthesizer, SpeechConfig, AudioConfig } = require('microsoft-cognitiveservices-speech-sdk');
+const logger = require('../utils/logger');
 
 class AzureTTS {
   constructor() {
     this.speechConfig = SpeechConfig.fromSubscription(
-      process.env.AZURE_SPEECH_KEY,
-      process.env.AZURE_SPEECH_REGION
+      process.env.AZURE_API_KEY,
+      process.env.AZURE_REGION
     );
+    // Set default voice
+    this.speechConfig.speechSynthesisVoiceName = "en-US-JennyNeural";
   }
 
-  async synthesize(text, voice = 'en-US-JennyNeural') {
-    this.speechConfig.speechSynthesisVoiceName = voice;
-    const synthesizer = new SpeechSynthesizer(this.speechConfig);
-    
+  async synthesize(text, voice, format = "audio-24khz-48kbitrate-mono-mp3") {
     return new Promise((resolve, reject) => {
-      synthesizer.speakTextAsync(
-        text,
-        (result) => {
-          if (result.reason === ResultReason.SynthesizingAudioCompleted) {
-            resolve(result.audioData);
-          } else {
-            reject(new Error(`Speech synthesis failed: ${result.errorDetails}`));
+      try {
+        this.speechConfig.speechSynthesisVoiceName = voice || this.speechConfig.speechSynthesisVoiceName;
+        this.speechConfig.speechSynthesisOutputFormat = format;
+
+        const audioConfig = AudioConfig.fromDefaultSpeakerOutput();
+        const synthesizer = new SpeechSynthesizer(this.speechConfig, audioConfig);
+
+        synthesizer.speakTextAsync(
+          text,
+          result => {
+            synthesizer.close();
+            if (result) {
+              resolve(result.audioData);
+            } else {
+              reject(new Error("No audio data received"));
+            }
+          },
+          error => {
+            synthesizer.close();
+            logger.error(`Azure TTS Error: ${error}`);
+            reject(error);
           }
-          synthesizer.close();
-        },
-        (error) => {
-          reject(error);
-          synthesizer.close();
-        }
-      );
+        );
+      } catch (error) {
+        logger.error(`Azure TTS Exception: ${error}`);
+        reject(error);
+      }
     });
   }
 }
