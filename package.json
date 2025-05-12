@@ -1,0 +1,24 @@
+{
+  "name": "tts-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration/issues"
+  },
+  "homepage": "https://github.com/HaNiya21/API-for-Azure-AI-Text-to-Speech-Integration#readme",
+  "description": ""
+}
