@@ -1,5 +1,6 @@
-const { convertToSpeech } = require('../services/azure-tts');
+const { synthesizeSpeech } = require('../services/azure-tts');
 
+// Controller function to handle Text-to-Speech requests
 const convertTextToSpeech = async (req, res, next) => {
     const { text } = req.body;
 
@@ -8,10 +9,16 @@ const convertTextToSpeech = async (req, res, next) => {
     }
 
     try {
-        const audioUrl = await convertToSpeech(text);
-        res.json({ audioUrl });
+        // Call the service to synthesize speech and generate the file
+        const audioUrl = await synthesizeSpeech(text);
+        
+        // Return the generated audio file URL
+        res.json({
+            message: 'Text-to-Speech synthesis completed.',
+            audioUrl: audioUrl  // The generated audio file URL
+        });
     } catch (error) {
-        next(error);
+        next(error);  // Pass the error to the error handling middleware
     }
 };
 
